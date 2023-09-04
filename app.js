@@ -1,76 +1,51 @@
 'use strict';
 
-const gameBoard = (() => {
+const GameBoard = (() => {
+
+    let gameBoard = ['', '', '', '', '', '', '', '', '']
 
     const render = () => {
-        let boarHTML = document.querySelector('.main-container').innerHTML = `
-        <div class="main-board">
-        <div class="control-btns">
-        <button role="button" class="button-name" id="markX" value="X">X</button>
-        <button role="button" class="button-name" id="markO" value="O">Y</button>
-        <button role="button" class="button-name" id="restart">Restart</button>
-    </div>
-        <div class="grid-board">
-            <div class="cell" data-index="1"></div>
-            <div class="cell" data-index="2"></div>
-            <div class="cell" data-index="3"></div>
-            <div class="cell" data-index="4"></div>
-            <div class="cell" data-index="5"></div>
-            <div class="cell" data-index="6"></div>
-            <div class="cell" data-index="7"></div>
-            <div class="cell" data-index="8"></div>
-            <div class="cell" data-index="9"></div>
-        </div>
-    </div>
-        `
+        let boardHTML = '';
+        gameBoard.forEach((cell, index) => {
+            boardHTML += `<div class='cell' id='square-${index}'>${cell}</div>`
+        })
+        document.querySelector('.grid-board').innerHTML = boardHTML
+        s
     }
-
     return {
         render,
     }
-})()
 
+})();
 
-// To choose the marks 
-
-const playerMark = (mark) => {
-    let markX = document.querySelector('#markX').value
-    let markO = document.querySelector('#markO').value
-
-    console.log(markX, markO);
-
-    //To place the marker by clicking
-    function placeMark() {
-        let cells = document.querySelectorAll('.cell').forEach(cell => {
-            cell.addEventListener("click", function () {
-
-            })
-        })
+const cratePlayer = (name, mark) => {
+    return {
+        name,
+        mark,
     }
-    placeMark()
+}
+
+const Game = (() => {
+    let players = []
+    let currentPlayerINdex;
+    let gameOVer;
+
+    const start = () => {
+        players = [
+            cratePlayer(document.querySelector('#markX').value, 'X'),
+            cratePlayer(document.querySelector('#markO').value, 'O')
+        ]
+        currentPlayerINdex = 0;
+        gameOVer = false;
+        GameBoard.render()
+    }
 
     return {
-        mark,
-        markX,
-        markO,
+        start,
     }
-}
-playerMark()
+})()
 
-document.querySelector('#restart').addEventListener('click', () => {
-    gameBoard.render()
-    playerMark()
+const restartButton = document.querySelector('#restart')
+restartButton.addEventListener('click', () => {
+    Game.start()
 })
-
-function markWithX(square, value) {
-    let markX = document.querySelector('#markX').addEventListener('click', function () {
-        square.innerHTML = value
-    })
-}
-
-
-function markWithO() {
-    let markO = document.querySelector('#markO').addEventListener('click', function () {
-        console.log('O is clicked!');
-    })
-}

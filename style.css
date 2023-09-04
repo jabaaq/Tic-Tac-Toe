@@ -96,3 +96,8 @@ body {
     box-shadow: #D6D6E7 0 3px 7px inset;
     transform: translateY(2px);
 }
+
+.button-name:disabled {
+    background-color: #9a9aae;
+    transform: translateY(0px);
+}
