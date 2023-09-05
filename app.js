@@ -1,5 +1,15 @@
 'use strict';
 
+const displayController = (() => {
+    const renderMessage = (message) => {
+        document.querySelector('.round-message').innerHTML = message
+        message.style.textShadow = `3px 4px 9px rgba(0,0,0,0.34)`
+    }
+    return {
+        renderMessage
+    }
+})()
+
 const GameBoard = (() => {
 
     let gameBoard = ['', '', '', '', '', '', '', '', '']
@@ -9,10 +19,17 @@ const GameBoard = (() => {
         gameBoard.forEach((cell, index) => {
             boardHTML += `<div class='cell' id='square-${index}'>${cell}</div>`
         })
+
         document.querySelector('.grid-board').innerHTML = boardHTML
         const squares = document.querySelectorAll('.cell')
         squares.forEach((square) => {
             square.addEventListener('click', Game.handleClick)
+            if (square.innerHTML === 'X') {
+                square.style.color = '#e25041'
+            } else if (square.innerHTML === 'O') {
+                square.style.color = '#1abc9c'
+            }
+            square.style.textShadow = `2px 3px 7px rgba(0,0,0,0.34)`
         })
     }
 
@@ -45,8 +62,8 @@ const Game = (() => {
 
     const start = () => {
         players = [
-            cratePlayer(document.querySelector('#markX').value, 'X'),
-            cratePlayer(document.querySelector('#markO').value, 'O')
+            cratePlayer('X', 'X'),
+            cratePlayer('O', 'O')
         ]
         currentPlayerINdex = 0;
         gameOver = false;
@@ -68,10 +85,10 @@ const Game = (() => {
 
         if (checkForWin(GameBoard.getGameboard(), players[currentPlayerINdex].mark)) {
             gameOver = true
-            alert(`${players[currentPlayerINdex].mark} Won the game!`)
+            displayController.renderMessage(`${players[currentPlayerINdex].mark} Won !`)
         } else if (checkForTie(GameBoard.getGameboard())) {
             gameOver = true
-            alert(`ITS A TIE`)
+            displayController.renderMessage(`It's a tie!`)
         }
         currentPlayerINdex = currentPlayerINdex === 0 ? 1 : 0
     }
@@ -81,6 +98,8 @@ const Game = (() => {
             GameBoard.update(i, '')
         }
         GameBoard.render();
+        gameOver = false
+        document.querySelector('.round-message').innerHTML = '';
     }
 
     return {
@@ -128,3 +147,4 @@ const restartButton = document.querySelector('#restart')
 restartButton.addEventListener('click', () => {
     Game.restart()
 })
+
